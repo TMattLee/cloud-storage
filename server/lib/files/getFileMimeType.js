@@ -1,11 +1,19 @@
-const readChunk = require('read-chunk');
-const fileType = require('file-type');
+const readChunk = require('read-chunk')
+const fileType = require('file-type')
 
-const isImageFile = ( pathToFile ) => {
-  const buffer = readChunk.sync(pathToFile, 0, 4100);
-  const { mime } = fileType( buffer );
-  if(  mime === 'image/png' || mime === 'image/jpeg') return true;
-  return false;
+const getFileMimeType = async( fileLocationString ) => {
+  
+  try{
+    const buffer = await readChunk(fileLocationString, 0, 255)
+    
+    const { mime } = fileType( buffer )
+    
+    return mime
+  }
+  catch( error ){
+    throw error
+  }
+  
 }
 
-module.exports = isImageFile;
+module.exports = getFileMimeType;

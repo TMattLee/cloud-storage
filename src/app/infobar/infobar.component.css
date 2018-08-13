@@ -1,0 +1,5 @@
+:host(app-infobar) {
+	display:					flex;
+	flex-direction:		column;
+	width:						20%;
+}

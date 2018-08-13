@@ -1,23 +1,11 @@
-const User = require('../../models/user')
+const User = require( '../../models/user' )
 
 const getUserByUsername = async( username ) => {
-	return (User.findOne({'local.username':username}).populate({
-	    path: 'mainFolder',
-	    populate:{
-	      path: 'contents',
-	      populate:{
-	        path: 'contents',
-	        populate:{
-	          path: 'contents',
-	          populate:{
-	            path: 'contents',
-	           
-	          }
-	        }
-	      }
-	    }
-		}))
-  
+	
+	const user = await User.findOne( { 'local.username': username } )
+		
+	return user
+		
 }
 
 module.exports = getUserByUsername

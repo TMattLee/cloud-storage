@@ -15,7 +15,16 @@ const UserSchema = new Schema({
 		ref: "Folder"
 	},
 	
-	dataSize: Number,
+	storageUsedInBytes: {
+		type: Number,
+		default: 0 
+	},
+	
+	maxStorageSizeInBytes: {
+		type: Number,
+		default: 16 * 1024 * 1024 //  16MB
+	},
+	
 })
 
 module.exports = mongoose.model("User", UserSchema);

@@ -6,6 +6,8 @@ const fileSchema = new Schema({
 	data:				String,
 	mimeType:		String,
 	sizeInKB:		Number,
+	//base64EncodedData: String,
+	binaryData:	Buffer,
 	ownerId: {
 		type: Schema.Types.ObjectId,
 		ref: "User"

@@ -1,0 +1,29 @@
+<mat-grid-list  *ngIf="data" cols="6" rowHeight="160px">
+	<mat-grid-tile
+		*ngFor="let folder of folders"
+		[colspan]="1"
+		[rowspan]="1">
+		
+		<app-item-card 
+				[itemType]="Folder"
+				[itemName]="folder.name"
+				[itemMimeType]="inode/directory"
+				>
+		</app-item-card>
+	
+	</mat-grid-tile>
+	
+	<mat-grid-tile
+		*ngFor="let file of files"
+		[colspan]="1"
+		[rowspan]="1">
+		
+		<app-item-card 
+				[itemType]="File"
+				[itemName]="file.name"
+				[itemMimeType]="file.mimeType"
+				>
+		</app-item-card>
+	
+	</mat-grid-tile>
+</mat-grid-list>

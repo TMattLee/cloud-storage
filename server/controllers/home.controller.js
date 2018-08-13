@@ -1,4 +1,4 @@
-const getUserByUsername = require('../lib/users/getUserByUsername')
+const getAndPopulateUserByUsername = require('../lib/users/getAndPopulateUserByUsername')
 
 module.exports = {
   home: ( req, res ) => {
@@ -11,8 +11,12 @@ module.exports = {
   ,getData: async(req,res) => {
     try{
       const {username} = req.query
-      const user = await getUserByUsername(username)
-      res.send(user)
+      const user = await getAndPopulateUserByUsername(username)
+      
+      const data = user
+      res.locals.data = data
+      //console.log(data)
+      res.send(data)
     }
     catch( error ){
       console.log( error)
