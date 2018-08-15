@@ -13,14 +13,10 @@ const createNewFileAndReturnId = require('./lib/files/createNewFileAndReturnId')
 const createNewUser = require('./lib/users/createNewUser')
 const getUserByUsername = require('./lib/users/getUserByUsername')
 
-const imageFolder = process.cwd() + '/tmp/uploads/'
-
 const populateDummyData = async () => {
   
-  
-  
-  let user1, mainFolderId, folder1Id, folder2Id, folder3Id, folder4Id, folder5Id;
-  let file1, file2, file3, file4, file5, file6
+  let user1, mainFolderId, folder1Id, folder2Id, folder3Id, folder4Id, folder5Id
+  let file1, file2, file3, file4, file5, file6, file7, file8, file9, file10, file11
   
   try{
     const username = 'Dummy User'
@@ -34,12 +30,16 @@ const populateDummyData = async () => {
     folder4Id = await createNewFolderAndReturnId('Fourth Level Directory', user1._id, folder3Id._id)
     folder5Id = await createNewFolderAndReturnId('Fifth Level Directory', user1._id, folder4Id._id)
   
-    file1 = await createNewFileAndReturnId(user1._id, user1.mainFolder, imageFolder + '62408_1.png')
-    file2 = await createNewFileAndReturnId(user1._id, user1.mainFolder, imageFolder + 'cat.jpeg')
-    file3 = await createNewFileAndReturnId(user1._id, folder1Id, imageFolder + 'cat.txt')
-    file4 = await createNewFileAndReturnId(user1._id, folder1Id, imageFolder + '62408_1.png')
-    file5 = await createNewFileAndReturnId(user1._id, folder3Id, imageFolder + 'cat.jpeg')
-    file6 = await createNewFileAndReturnId(user1._id, folder4Id, imageFolder + 'cat.txt')
+    file1 = await createNewFileAndReturnId(user1._id, user1.mainFolder, '62408_1.png')
+    file2 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.jpeg')
+    file3 = await createNewFileAndReturnId(user1._id, folder1Id, 'cat.txt')
+    file4 = await createNewFileAndReturnId(user1._id, folder1Id, '62408_1.png')
+    file5 = await createNewFileAndReturnId(user1._id, folder3Id, 'cat.jpeg')
+    file6 = await createNewFileAndReturnId(user1._id, folder4Id, 'cat.txt')
+    file7 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
+    file8 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
+    file9 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
+    file10 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
   
     await user1.save( error => console.log )
     

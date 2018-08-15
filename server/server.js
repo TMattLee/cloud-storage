@@ -27,15 +27,19 @@ const getFolderLevelById = require('./lib/folders/getFolderLevelById.js')
 User.findOne({})
   .populate({
     path: 'mainFolder',
+    select: '-binaryData',
     populate:{
       path: 'contents',
+      select: '-binaryData',
       populate:{
         path: 'contents',
+        select: '-binaryData',
         populate:{
           path: 'contents',
+          select: '-binaryData',
           populate:{
             path: 'contents',
-           
+            select: '-binaryData',
           }
         }
       }
@@ -47,6 +51,7 @@ User.findOne({})
       populateDummyData();
     }
     else{
+      console.log(JSON.stringify(docs,null,4))
       Folder.findOne({_id:"5b6b30f2b90a767e406064d8"}).exec((error, folder) => {
         if(folder) getFolderLevelById(folder._id)
         .then( level => console.log("Level of folder is: ",level))

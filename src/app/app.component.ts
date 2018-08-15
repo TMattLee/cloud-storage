@@ -9,20 +9,39 @@ import axios from 'axios';
 export class AppComponent {
   title = 'cloud-storage';
   
-  fileData = null;
+	folderContents = null;
+	
+	mainFolder= null;
+  
+  private itemInfo: Object;
   
   ngAfterViewInit(){
     console.log('initializing...');
     axios({
       method: 'GET',
-      url:'api/getData?username=Dummy%20User',
+      url:'api/getUser?username=Dummy%20User',
     })
     .then( response => {
+      console.log(response.data.mainFolder)
+      this.folderContents = response.data.mainFolder.contents;
+      this.mainFolder = response.data.mainFolder;
       
-      this.fileData = response.data.mainFolder
-      console.log(this.fileData)
     })
     .catch( error => console.log( error ));
   }
   
+  updateFileItem(event){
+  	this.itemInfo = event
+  }
+  
+  getFolderContents(event){
+  	console.log('contents', event)
+  	if(event) {
+  		this.folderContents = event;
+  	} else {
+  		this.folderContents = null;
+  	}
+  }
+  
+
 }

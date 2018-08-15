@@ -3,7 +3,10 @@ import {
   OnInit,
   OnChanges, 
   SimpleChanges,
-  Input  } from '@angular/core';
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'app-item-grid',
@@ -14,11 +17,13 @@ import {
 export class ItemGridComponent implements OnInit, OnChanges {
   
  
-  @Input() fileData : Object;
+  @Input() folderContents : Object;
+  @Output() sendFileInfoToAppComponentEvent: EventEmitter<Object> = new EventEmitter();
   
-  private data: Array<Object>;
+  private data: Array<Object> = null;
   private files: Array<Object>;
   private folders: Array<Object>;
+  private isEmpty: Boolean = false;
 
   constructor() { 
     this.files = [];
@@ -29,18 +34,25 @@ export class ItemGridComponent implements OnInit, OnChanges {
   }
   
   ngOnChanges(changes: SimpleChanges){
-    const fileData = changes.fileData;
-    console.log(fileData);
     
-    if(!fileData.currentValue) return;
+    this.folders = [];
+    this.files = [];
+    const changedData = changes.folderContents;
+    console.log(changedData);
     
-    this.data = fileData.currentValue.contents;
+    if(!changedData.currentValue) {
+      this.isEmpty = true;
+      return;
+    } else {
+      this.isEmpty = false;
+    }
+    
+    this.data = changedData.currentValue;
     
     const data: Array<any> = this.data;
     
     if( data ){
       data.forEach( obj => {
-        console.log(obj.kind)
         if( obj.kind === 'Folder') this.folders.push(obj);
         if( obj.kind === 'File') this.files.push(obj); 
       })
@@ -48,5 +60,7 @@ export class ItemGridComponent implements OnInit, OnChanges {
     
   }
   
-
+  sendFileInfoToAppComponent(event){
+    this.sendFileInfoToAppComponentEvent.emit(event)
+  }
 }

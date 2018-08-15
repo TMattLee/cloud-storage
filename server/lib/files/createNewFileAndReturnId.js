@@ -4,7 +4,7 @@ const { promisify } = require( 'util' );
 const File = require('../../models/file.js')
 
 const getFileDataObject = require('./getFileDataObject')
-const getFileMimeType = require('./getFileMimeType')
+const getFileMimeTypeAndExtension = require('./getFileMimeTypeAndExtension')
 const _isMimeTypeAllowed = require('./_isMimeTypeAllowed')
 
 const getUserById = require('../users/getUserById')
@@ -13,10 +13,13 @@ const getFileStatAsync = promisify( fs.stat )
 
 const maxFileSizeInBytes = 1024 * 1024 * 2
 
-const createNewFileAndReturnId = async( ownerId, parentFolderId, fileLocationString ) => {
+const createNewFileAndReturnId = async( ownerId, parentFolderId, filename ) => {
+	
+	const fileLocationString = process.cwd() + '/tmp/uploads/' + filename
+	console.log(fileLocationString)
 	
 	try{
-		const fileStats = await getFileStatAsync( fileLocationString )
+		const fileStats = await getFileStatAsync(  fileLocationString )
 		
 		if(fileStats.size > maxFileSizeInBytes ){ 
 			throw {
@@ -25,18 +28,18 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, fileLocationStr
 			}
 		}
 		
-		const mimeType = await getFileMimeType( fileLocationString )
+		const { mime, ext } = await getFileMimeTypeAndExtension( filename )
 		
-		if( _isMimeTypeAllowed( mimeType ) !== true ){
+		if( _isMimeTypeAllowed( mime ) !== true ){
 			throw {
 				type: 'MIME_TYPE_NOT_ALLOWED_ERROR',
-				message: 'File type is not allowed: ' + mimeType
+				message: 'File type is not allowed: ' + mime
 			}
 		}
 		
 		const user = await getUserById( ownerId )
 		
-		console.log(user, ownerId)
+		///console.log(user, ownerId)
 		
 		if(user.storageUsedInBytes + fileStats.size > user.maxStorageSizeInBytes) {
 			throw {
@@ -45,13 +48,14 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, fileLocationStr
 			}
 		}
 		
-		const fileData = await getFileDataObject( fileLocationString )
+		const fileData = await getFileDataObject( filename )
 		
 		const file = await new File({
 			name:						fileData.name,
 			ownerId:				ownerId,
-			size:						fileData.size,
-			mimeType:				fileData.mime,
+			sizeInKB:				Math.floor(fileStats.size / 1024),
+			extension:			ext,
+			mimeType:				mime,
 			//base64EncodedData:		fileData.base64EncodedData,
 			binaryData:			fileData.binaryData,
 			parentFolderId: parentFolderId
@@ -66,8 +70,7 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, fileLocationStr
 		return file._id
 	}
 	catch( error ){
-		console.log(error)
-		return error
+		throw error
 	}
 	
 	return null

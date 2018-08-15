@@ -1,4 +1,6 @@
 const getAndPopulateUserByUsername = require('../lib/users/getAndPopulateUserByUsername')
+const getFileInfoById = require('../lib/files/getFileInfoById')
+const getFolderById = require('../lib/folders/getFolderById')
 
 module.exports = {
   home: ( req, res ) => {
@@ -6,9 +8,9 @@ module.exports = {
       page: 'index', 
       message: req.flash( 'notification' ),
     });
-  }
+  },
 
-  ,getData: async(req,res) => {
+  getUser: async(req,res) => {
     try{
       const {username} = req.query
       const user = await getAndPopulateUserByUsername(username)
@@ -21,11 +23,30 @@ module.exports = {
     catch( error ){
       console.log( error)
     }
-  }
+  },
   
   
-  ,postData: (req,res) => {
+  postUser: async( req,res ) => {
     
-  }
+  },
+  
+  getItemInfo: async( req, res ) => { 
+    try{  
+      
+      const { id, kind } = req.query
+      const data  = kind === "File" ? await getFileInfoById( id ) : await getFolderById( id ) 
+      res.send( data )
+      
+    }
+    catch( error ){
+      console.log( error)
+    }
+  },
+  
+  postItem: async( req,res ) => {
+    
+  },
+  
+  
   
 }

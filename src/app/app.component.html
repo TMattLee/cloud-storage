@@ -1,6 +1,6 @@
 <app-header></app-header>
-<div class="body-container">
-  <app-navbar [fileData]=fileData ></app-navbar>
-  <app-item-grid [fileData]=fileData >></app-item-grid>
-  <app-infobar></app-infobar>
+<div class="body-container" >
+  <app-navbar [mainFolder]=mainFolder (sendNodeInfoToAppComponentEvent)="getFolderContents($event)" ></app-navbar>
+  <app-item-grid [folderContents]=folderContents (sendFileInfoToAppComponentEvent)="updateFileItem($event)" ></app-item-grid>
+  <app-infobar [itemInfo]=itemInfo ></app-infobar>
 </div>

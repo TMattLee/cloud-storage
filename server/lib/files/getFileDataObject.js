@@ -2,19 +2,21 @@ const { promisify } = require( 'util' );
 const fs = require( 'fs' )
 const readFileAsync = promisify( fs.readFile )
 
-const getFileMimeType = require('./getFileMimeType')
+const getFileMimeTypeAndExtension = require('./getFileMimeTypeAndExtension')
 const base64Encode = require('./base64Encode')
 
-const getFileDataObject = async(fileLocationString) => {
+const getFileDataObject = async(filename) => {
+	
+	const fileLocationString = process.cwd() + '/tmp/uploads/' + filename
+	  console.log('filedata',fileLocationString)
+
 	try{
-		const mime = await getFileMimeType(fileLocationString)
+		const { mime, extension } = await getFileMimeTypeAndExtension( filename )
 		//const base64EncodedData = await base64Encode(fileLocationString)
-		const binaryData = await readFileAsync(fileLocationString)
-		
+		const binaryData = await readFileAsync( fileLocationString )
+
 		return {
-			name:								"tempname",
-			mime:								mime,
-			sizeInKB:						32000,
+			name:								filename,
 			//base64EncodedData:	base64EncodedData
 			binaryData:					binaryData
 		}

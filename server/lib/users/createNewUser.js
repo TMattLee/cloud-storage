@@ -40,7 +40,7 @@ const createNewUser = async( username ) => {
 	const catImageFile = await new File({
 		name:									'Welcome Cat',
 		ownerId:							user._id,
-		size:									33790 * 1024,
+		sizeInKB:							33790 * 1024,
 		mimeType:							'image/png',
 		binaryData:						fileData,
 		parentFolderId: 			mainFolder._id

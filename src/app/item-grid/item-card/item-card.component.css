@@ -1,20 +1,29 @@
+:host(app-item-card):hover{
+	
+}
 
 .card {
-	position: relative;
-	min-height:		100px;
+	position: 	relative;
+	min-height:	100px;
 	min-width:	70px;
 }
 
+.card:hover{
+	cursor: 		pointer;
+	background-color: grey;
+	color:						#eee;
+}
+
 .card-icon {
-	position: absolute;
-	font-size: 64px;
+	position: 	absolute;
+	font-size:	64px;
 	text-align: center;
 }
 
 .card-content {
-	position: absolute;
+	position: 	absolute;
 	text-align: center;
-	top:			110px;
-	width:		inherit;
+	top:				110px;
+	width:			inherit;
 	text-align: center;
 }
