@@ -3,9 +3,9 @@ const allowedTypeObject = {
 	'image/jpeg': 			true,
 	'image/gif':				true,
 	'image/png':				true,
-	'image/bmp':				true,
 	'application/pdf':	true,
 	'video/mp4':				true,
+	'video/webm':				true,
 	
 }
 

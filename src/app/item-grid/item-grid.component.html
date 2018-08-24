@@ -1,32 +1,45 @@
-<mat-grid-list  *ngIf="!isEmpty" cols="6" rowHeight="160px" >
-	<mat-grid-tile
-		*ngFor="let folder of folders"
-		[colspan]="1"
-		[rowspan]="1">
+<div class="grid-container" *ngIf="!(isLoading | async)"> 
+	<mat-grid-list  *ngIf="!isEmpty" cols="6" rowHeight="160px" >
+		<mat-grid-tile
+			*ngFor="let folder of folders"
+			[colspan]="1"
+			[rowspan]="1">
+			
+			<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
+					[kind]="folder.kind"
+					[name]="folder.name"
+					[mimeType]="inode/directory"
+					[id]="folder._id"
+					>
+			</app-item-card>
 		
-		<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
-				[kind]="folder.kind"
-				[name]="folder.name"
-				[mimeType]="inode/directory"
-				[id]="folder._id"
-				>
-		</app-item-card>
-	
-	</mat-grid-tile>
-	
-	<mat-grid-tile
-		*ngFor="let file of files"
-		[colspan]="1"
-		[rowspan]="1">
+		</mat-grid-tile>
 		
-		<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
-				[kind]="file.kind"
-				[name]="file.name"
-				[mimeType]="file.mimeType"
-				[id]="file._id"
-				>
-		</app-item-card>
-	
-	</mat-grid-tile>
-</mat-grid-list>
-<div *ngIf="isEmpty">Folder is Empty.</div>
+		<mat-grid-tile
+			*ngFor="let file of files"
+			[colspan]="1"
+			[rowspan]="1">
+			
+			<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
+					[kind]="file.kind"
+					[name]="file.name"
+					[mimeType]="file.mimeType"
+					[id]="file._id"
+					>
+			</app-item-card>
+		
+		</mat-grid-tile>
+	</mat-grid-list>
+	<div *ngIf="isEmpty && !noResultsIndicator">
+		<mat-card class="empty-warning">Folder is empty.</mat-card>
+	</div>
+	<div *ngIf="noResultsIndicator">
+		<mat-card class="empty-warning">No results</mat-card>
+	</div>
+</div>
+<div *ngIf="(isLoading | async)" class="spinner-container">
+	<mat-progress-spinner 
+		[color]="progressSpinnerColor"  
+		[mode]="progressSpinnerMode"
+		class="spinner"></mat-progress-spinner>
+</div>

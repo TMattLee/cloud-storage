@@ -1,15 +1,32 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { MatMenuModule } from '@angular/material/menu';
+import { 
+  NgRedux, 
+  NgReduxModule, 
+  DevToolsExtension 
+} from '@angular-redux/store';
+
+import { 
+  IAppState, 
+  rootReducer, 
+  INITIAL_STATE 
+} from './app.store';
+
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -18,6 +35,7 @@ import { ItemGridComponent } from './item-grid/item-grid.component';
 import { InfobarComponent } from './infobar/infobar.component';
 import { FolderComponent } from './navbar/folder/folder.component';
 import { ItemCardComponent } from './item-grid/item-card/item-card.component';
+import { SearchComponent } from './search/search.component';
 
 
 @NgModule({
@@ -29,19 +47,47 @@ import { ItemCardComponent } from './item-grid/item-card/item-card.component';
     InfobarComponent,
     FolderComponent,
     ItemCardComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule, 
     BrowserAnimationsModule,
-    MatMenuModule,
+    NgReduxModule,
     MatButtonModule,
     MatIconModule,
     MatGridListModule,
     MatCardModule,
     MatToolbarModule,
-    MatTreeModule
+    MatTreeModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatButtonToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+   constructor(
+    private ngRedux: NgRedux<IAppState>,
+    private devTools: DevToolsExtension) {
+
+    let enhancers = [];
+    // ... add whatever other enhancers you want.
+
+    // You probably only want to expose this tool in devMode.
+    
+    enhancers = [ ...enhancers, devTools.enhancer() ];
+    
+
+
+    this.ngRedux.configureStore(
+      rootReducer,
+      INITIAL_STATE,
+      //[],
+      //enhancers
+    );
+  }
+}

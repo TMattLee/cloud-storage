@@ -4,7 +4,7 @@ const getFolderById = async (folderId) => {
 	
 	try{
 		let folder = await Folder.findById(folderId).populate('contents')
-		console.log(folder)
+		//console.log(folder)
 		return folder
 	}
 	catch( error ){

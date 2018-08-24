@@ -27,7 +27,7 @@ const createNewUser = async( username ) => {
 	})
 	
 	const mainFolder = await new Folder({
-		name:						'main',
+		name:						'Home',
 		ownerId:				user._id,
 		parentFolderId: null,
 		level:					0,

@@ -4,8 +4,8 @@
 
 .card {
 	position: 	relative;
-	min-height:	100px;
-	min-width:	70px;
+	height:	100px;
+	width:	70px;
 }
 
 .card:hover{
@@ -22,8 +22,10 @@
 
 .card-content {
 	position: 	absolute;
-	text-align: center;
 	top:				110px;
-	width:			inherit;
+	left: 			10px;
+	width:			98px;
+	height:			35px;
 	text-align: center;
+	word-wrap:	break-word;
 }

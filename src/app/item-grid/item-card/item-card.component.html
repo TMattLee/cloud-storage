@@ -1,5 +1,5 @@
 <mat-card class="card" [class.mat-elevation-z4]=true (click)="handleCardClick($event)">
 	<mat-icon *ngIf="isFolder"class="card-icon">folder</mat-icon>
 	<mat-icon *ngIf="isFile"class="card-icon">image</mat-icon>
-	<mat-card-content class="card-content">{{name}}</mat-card-content>
+	<mat-card-content class="card-content">{{name.slice(0,20)}}</mat-card-content>
 </mat-card>

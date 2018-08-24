@@ -24,8 +24,8 @@ const populateDummyData = async () => {
     
     const user1 = await getUserByUsername(username)
     
-    folder1Id = await createNewFolderAndReturnId('First Level', user1._id, user1.mainFolder)
-    folder2Id = await createNewFolderAndReturnId('Second Directory', user1._id, folder1Id._id)
+    folder1Id = await createNewFolderAndReturnId('First Level Directory', user1._id, user1.mainFolder)
+    folder2Id = await createNewFolderAndReturnId('Second Level Directory', user1._id, folder1Id._id)
     folder3Id = await createNewFolderAndReturnId('Third Level Directory', user1._id, folder2Id._id)
     folder4Id = await createNewFolderAndReturnId('Fourth Level Directory', user1._id, folder3Id._id)
     folder5Id = await createNewFolderAndReturnId('Fifth Level Directory', user1._id, folder4Id._id)
@@ -40,6 +40,17 @@ const populateDummyData = async () => {
     file8 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
     file9 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
     file10 = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
+    
+    for(let i = 0; i < 10; i++){
+      const repeatedFile = await createNewFileAndReturnId(user1._id, user1.mainFolder, 'cat.txt')
+    }
+    const randomFile = ['lorem.txt','ipsum.txt','cat.txt','62408_1.png','cat.jpeg'];
+    for(let i = 0; i < 50; i++){
+      const num = Math.floor(Math.random() * randomFile.length)
+      const name = randomFile[num]
+      //console.log('attempting to insert ', name)
+      const repeatedFile = await createNewFileAndReturnId(user1._id, folder3Id, randomFile[num])
+    }
   
     await user1.save( error => console.log )
     

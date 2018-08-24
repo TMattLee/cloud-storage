@@ -1,19 +1,31 @@
 import { Component } from '@angular/core';
 import axios from 'axios';
 
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from './app.store';
+import { updateMainFolder } from './app.actions';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+	
+	@select() mainFolder;
+	
   title = 'cloud-storage';
   
 	folderContents = null;
+
 	
-	mainFolder= null;
-  
   private itemInfo: Object;
+  private searchString: string = '';
+  private matchCase: Boolean = false;
+  
+  constructor(private ngRedux: NgRedux<IAppState>) { 
+  	
+  } 
   
   ngAfterViewInit(){
     console.log('initializing...');
@@ -24,14 +36,22 @@ export class AppComponent {
     .then( response => {
       console.log(response.data.mainFolder)
       this.folderContents = response.data.mainFolder.contents;
-      this.mainFolder = response.data.mainFolder;
-      
+      const mainFolder = response.data.mainFolder;
+      this.ngRedux.dispatch( updateMainFolder(mainFolder) );
+      console.log(this.ngRedux)
     })
     .catch( error => console.log( error ));
   }
   
   updateFileItem(event){
   	this.itemInfo = event
+  }
+  
+  applySearchParams(event){
+  	console.log(event)
+  	const { searchString, matchCase } = event;
+  	this.searchString = searchString;
+  	this.matchCase = matchCase;
   }
   
   getFolderContents(event){

@@ -1,0 +1,7 @@
+.search-section {
+	display:				flex;
+	flex-direction: column;
+	align-items:		flex-end;
+	width:					85%;
+	margin:					10px auto;
+}

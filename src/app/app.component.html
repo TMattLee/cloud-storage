@@ -1,6 +1,36 @@
 <app-header></app-header>
+
 <div class="body-container" >
-  <app-navbar [mainFolder]=mainFolder (sendNodeInfoToAppComponentEvent)="getFolderContents($event)" ></app-navbar>
-  <app-item-grid [folderContents]=folderContents (sendFileInfoToAppComponentEvent)="updateFileItem($event)" ></app-item-grid>
-  <app-infobar [itemInfo]=itemInfo ></app-infobar>
+  
+  <div class="navbar-container">
+    
+    <app-navbar *ngIf="!!(mainFolder | async)" 
+      (sendSearchParamsToAppComponentEvent)="applySearchParams($event)" 
+      (sendNodeInfoToAppComponentEvent)="getFolderContents($event)" >
+    </app-navbar>
+    
+  </div>
+  
+  <mat-divider [vertical]="true"></mat-divider>
+  
+  <div class="item-grid-container">
+    
+    <app-item-grid 
+        [folderContents]=folderContents 
+        [matchCase]=matchCase
+        [searchString]=searchString
+        (sendFileInfoToAppComponentEvent)="updateFileItem($event)" >
+    </app-item-grid>
+  
+  </div>
+  
+  <mat-divider [vertical]="true"></mat-divider>
+  
+  
+  
+  <div class="infobar-container">
+    
+    <app-infobar [itemInfo]=itemInfo ></app-infobar>
+  </div>
+  
 </div>

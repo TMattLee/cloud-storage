@@ -6,6 +6,7 @@ const fileSchema = new Schema({
 	data:				String,
 	mimeType:		String,
 	sizeInKB:		Number,
+	fileType:		String,
 	//base64EncodedData: String,
 	extension:	String,
 	binaryData:	Buffer,

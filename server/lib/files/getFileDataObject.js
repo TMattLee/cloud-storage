@@ -8,7 +8,7 @@ const base64Encode = require('./base64Encode')
 const getFileDataObject = async(filename) => {
 	
 	const fileLocationString = process.cwd() + '/tmp/uploads/' + filename
-	  console.log('filedata',fileLocationString)
+	  //console.log('filedata',fileLocationString)
 
 	try{
 		const { mime, extension } = await getFileMimeTypeAndExtension( filename )

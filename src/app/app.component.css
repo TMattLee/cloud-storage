@@ -2,9 +2,29 @@
 	width:			100%;
 	height:			100%;	
 }
+
 .body-container {
 	display:		flex;
-	width:			80%;
+	width:			100%;
 	margin:			64px auto 20px auto;
 	
+}
+
+.navbar-container {
+	display:				flex;
+	flex-direction:	column;
+	width:					15%;
+	float:					left;
+	overflow:				hidden;
+}
+
+.item-grid-container {
+	background-color:	#ffbbb;
+	width:						60%;
+}
+
+.infobar-container {
+	display:					flex;
+	flex-direction:		column;
+	width:						25%;
 }

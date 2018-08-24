@@ -1,0 +1,14 @@
+<div class="search-section">
+	<mat-form-field class="example-full-width">
+    <input #searchField matInput placeholder="Search" (input)="handleSearchChange($event)" [maxLength]="maxLength">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <mat-slide-toggle
+  		(change)="handleSliderToggle($event)"
+      class="toggle-button"
+      [color]="color"
+      [checked]="checked"
+      [disabled]="disabled">
+    Match Case
+  </mat-slide-toggle>
+</div>

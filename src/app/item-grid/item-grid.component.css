@@ -1,6 +1,46 @@
 :host(app-item-grid) {
-	background-color:	#ffbbb;
-	width:						60%;
-	padding:					20px;
+	height:						calc(100vh - 64px - 64px);
 }
 
+.grid-container::-webkit-scrollbar {
+	width:8px;
+}
+
+.grid-container::-webkit-scrollbar-track {
+	background:		#e8e8e8;
+}
+
+.grid-container::-webkit-scrollbar-piece {
+	
+}
+
+.grid-container::-webkit-scrollbar-thumb {
+	background: 		#888;
+	border-radius:	5px;
+}
+
+.grid-container::-webkit-scrollbar-thumb:hover {
+	background: #555; 
+}
+
+.grid-container {
+	max-height: 	Calc(100vh - 64px - 32px);
+  overflow: 		overlay;
+  margin-right: 10px;
+}
+
+.empty-warning {
+	margin:				20px;
+	text-align: 	center;
+}
+
+.spinner-container {
+	position:	relative;
+	height:		100%;
+	width:		100%;
+}
+
+.spinner {
+	top: calc(50% - 50px);
+	left: calc(50% - 50px);
+}

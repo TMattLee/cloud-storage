@@ -1,8 +1,18 @@
 :host(app-navbar) {
-	display:			flex;
-	flex-direction:		column;
-	width:				20%;
-	float:				left;
+	
+}
+
+
+
+.navbar-divider {
+	margin: 10px;
+}
+
+.button-group {
+	position:		inherit;
+	box-shadow:	none;
+	padding:		0px 10px;
+	margin: 		-5px;
 }
 
 .tree-invisible {
@@ -11,16 +21,35 @@
 
 .tree ul,
 .tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-  padding-left: 5px;
+  margin-top: 			0;
+  margin-bottom:		0;
+  list-style-type:	none;
+  padding-left: 		5px;
+}
+
+.mat-icon-button {
+	width: inherit;
+}
+
+.mat-tree-node {
+	min-height: 40px;
+}
+
+.mat-tree-node-open {
+	min-height: 40px;
+	border-left: 2px solid;
 }
 
 .foldername {
 	cursor: pointer;
 }
 
-.mat-tree-node {
-	min-height: 40px;
+.mat-button-toggle {
+	border-radius:	10px;
+	margin-left:		5px;
+}
+
+
+.mat-button-toggle-ripple, .mat-ripple {
+	border-radius: 20px !important;
 }

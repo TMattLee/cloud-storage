@@ -11,7 +11,7 @@ const base64Encode = async( fileLocationString ) => {
         
         const fileStats = await getFileStatsAsync( fileLocationString )
         
-        console.log('file size: ', fileStats.size)
+        //console.log('file size: ', fileStats.size)
         
         return new Buffer( file ).toString( 'base64')
     }

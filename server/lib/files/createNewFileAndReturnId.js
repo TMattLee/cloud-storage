@@ -6,6 +6,7 @@ const File = require('../../models/file.js')
 const getFileDataObject = require('./getFileDataObject')
 const getFileMimeTypeAndExtension = require('./getFileMimeTypeAndExtension')
 const _isMimeTypeAllowed = require('./_isMimeTypeAllowed')
+const getFileTypeByExtension = require('./getFileTypeByExtension')
 
 const getUserById = require('../users/getUserById')
 
@@ -16,8 +17,7 @@ const maxFileSizeInBytes = 1024 * 1024 * 2
 const createNewFileAndReturnId = async( ownerId, parentFolderId, filename ) => {
 	
 	const fileLocationString = process.cwd() + '/tmp/uploads/' + filename
-	console.log(fileLocationString)
-	
+
 	try{
 		const fileStats = await getFileStatAsync(  fileLocationString )
 		
@@ -39,8 +39,6 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, filename ) => {
 		
 		const user = await getUserById( ownerId )
 		
-		///console.log(user, ownerId)
-		
 		if(user.storageUsedInBytes + fileStats.size > user.maxStorageSizeInBytes) {
 			throw {
 				type: 'STORAGE_LIMI_EXCEEDED_ERROR',
@@ -56,6 +54,7 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, filename ) => {
 			sizeInKB:				Math.floor(fileStats.size / 1024),
 			extension:			ext,
 			mimeType:				mime,
+			fileType:				getFileTypeByExtension( ext ),
 			//base64EncodedData:		fileData.base64EncodedData,
 			binaryData:			fileData.binaryData,
 			parentFolderId: parentFolderId
@@ -73,7 +72,6 @@ const createNewFileAndReturnId = async( ownerId, parentFolderId, filename ) => {
 		throw error
 	}
 	
-	return null
 }
 
 module.exports = createNewFileAndReturnId
