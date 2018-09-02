@@ -1,18 +1,18 @@
 <div class="grid-container" *ngIf="!(isLoading | async)"> 
-	<mat-grid-list  *ngIf="!isEmpty" cols="6" rowHeight="160px" >
+	<mat-grid-list  *ngIf="!isEmpty && !noResultsIndicator" cols="6" rowHeight="160px">
 		<mat-grid-tile
 			*ngFor="let folder of folders"
 			[colspan]="1"
 			[rowspan]="1">
 			
-			<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
+			<app-item-card 
+					[item]="folder"
 					[kind]="folder.kind"
 					[name]="folder.name"
 					[mimeType]="inode/directory"
 					[id]="folder._id"
-					>
-			</app-item-card>
-		
+			></app-item-card>
+
 		</mat-grid-tile>
 		
 		<mat-grid-tile
@@ -20,20 +20,20 @@
 			[colspan]="1"
 			[rowspan]="1">
 			
-			<app-item-card (sendFileInfoToItemGridEvent)="sendFileInfoToAppComponent($event)"
+			<app-item-card 
+					[item]="file"
 					[kind]="file.kind"
 					[name]="file.name"
 					[mimeType]="file.mimeType"
 					[id]="file._id"
-					>
-			</app-item-card>
-		
+			></app-item-card>
+
 		</mat-grid-tile>
 	</mat-grid-list>
-	<div *ngIf="isEmpty && !noResultsIndicator">
+	<div *ngIf="isEmpty">
 		<mat-card class="empty-warning">Folder is empty.</mat-card>
 	</div>
-	<div *ngIf="noResultsIndicator">
+	<div *ngIf="!isEmpty && noResultsIndicator">
 		<mat-card class="empty-warning">No results</mat-card>
 	</div>
 </div>

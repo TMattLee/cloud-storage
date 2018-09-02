@@ -1,14 +1,21 @@
 <div class="search-section">
 	<mat-form-field class="example-full-width">
-    <input #searchField matInput placeholder="Search" (input)="handleSearchChange($event)" [maxLength]="maxLength">
+    <input #searchField matInput 
+      type="text" 
+      placeholder="Search" 
+      (keyup)="handleSearchChange($event)" 
+      [formControl]="searchFormControl"
+      [errorStateMatcher]="matcher"
+      [maxLength]="maxLength">
+    <mat-error >Alphanumeric characters only!</mat-error>
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
   <mat-slide-toggle
   		(change)="handleSliderToggle($event)"
       class="toggle-button"
       [color]="color"
-      [checked]="checked"
-      [disabled]="disabled">
+      [checked]="( shouldMatchCase | async )"
+  >
     Match Case
   </mat-slide-toggle>
 </div>

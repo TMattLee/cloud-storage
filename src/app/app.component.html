@@ -4,9 +4,7 @@
   
   <div class="navbar-container">
     
-    <app-navbar *ngIf="!!(mainFolder | async)" 
-      (sendSearchParamsToAppComponentEvent)="applySearchParams($event)" 
-      (sendNodeInfoToAppComponentEvent)="getFolderContents($event)" >
+    <app-navbar *ngIf="!!(mainFolder | async)" >
     </app-navbar>
     
   </div>
@@ -15,13 +13,8 @@
   
   <div class="item-grid-container">
     
-    <app-item-grid 
-        [folderContents]=folderContents 
-        [matchCase]=matchCase
-        [searchString]=searchString
-        (sendFileInfoToAppComponentEvent)="updateFileItem($event)" >
-    </app-item-grid>
-  
+    <app-item-grid ></app-item-grid>
+
   </div>
   
   <mat-divider [vertical]="true"></mat-divider>
@@ -30,7 +23,7 @@
   
   <div class="infobar-container">
     
-    <app-infobar [itemInfo]=itemInfo ></app-infobar>
+    <app-infobar ></app-infobar>
   </div>
   
 </div>

@@ -11,67 +11,41 @@ import {
 
 import axios from 'axios';
 
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from '../../app.store';
+import { updateItemInfo } from '../../app.actions';
+
 @Component({
   selector: 'app-item-card',
   templateUrl: './item-card.component.html',
   styleUrls: ['./item-card.component.css']
 })
-export class ItemCardComponent implements OnInit, OnChanges {
+export class ItemCardComponent implements OnInit {
+  
+  @Input() item: Object;
   
   @Input() kind: String;
   @Input() name: String;
   @Input() mimeType: String;
   @Input() id: String;
   
-  @Output()
-  sendFileInfoToItemGridEvent: EventEmitter<Object> = new EventEmitter();
-  
   private isFile: Boolean = false;
   private isFolder: Boolean = false;
 
-  constructor(private el: ElementRef) {
+  constructor(private ngRedux: NgRedux<IAppState>,private el: ElementRef) {
+    
   }
 
   ngOnInit() {
-  }
-  
-  ngOnChanges(changes: SimpleChanges){
-    
-    const kind = changes.kind.currentValue
-    console.log('card',changes.kind.currentValue)
     if(this.kind === 'Folder'){
       this.isFolder = true;
     } else {
       this.isFile = true;
     }
-    console.log(this.kind)
   }
   
-  handleCardClick(event){
-    event.preventDefault();
-    this.getFileInfo();
-  }
-  
-  getFileInfo(){
-    axios({
-      method: 'GET',
-      url:'api/getItemInfo',
-      params:{
-        id:   this.id,
-        kind: this.kind,
-      }
-    })
-    .then( response => {
-      
-      const { data } = response
-      console.log('got file data...', data)
-      this.sendFileInfoToItemGrid(data)
-    })
-    .catch( error => console.log( error ) )
-  }
-  
-  sendFileInfoToItemGrid(event){
-    this.sendFileInfoToItemGridEvent.emit(event)
+  updateItemInfo(event, item){
+    this.ngRedux.dispatch( updateItemInfo(this.item) );
   }
 
 }

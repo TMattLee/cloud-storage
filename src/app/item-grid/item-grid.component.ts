@@ -1,8 +1,6 @@
 import { 
   Component, 
   OnInit,
-  OnChanges, 
-  SimpleChanges,
   Input,
   Output,
   EventEmitter
@@ -10,7 +8,12 @@ import {
 
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from '../app.store';
-import { setIsLoadingToFalse } from '../app.actions';
+import { 
+  setIsLoadingToFalse,
+  setIsLoadingToTrue,
+} from '../app.actions';
+
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-item-grid',
@@ -18,25 +21,24 @@ import { setIsLoadingToFalse } from '../app.actions';
   styleUrls: ['./item-grid.component.css']
 })
 
-export class ItemGridComponent implements OnInit, OnChanges {
+export class ItemGridComponent implements OnInit {
   
   @select() isLoading;
+  @select() shouldMatchCase;
+  @select() searchString;
+  @select() currentFolderContents;
  
-  @Input()  folderContents : Object;
-  @Input()  matchCase: Boolean;
-  @Input()  searchString: string;
-  @Output() sendFileInfoToAppComponentEvent: EventEmitter<Object> = new EventEmitter();
-  
-  private data: Array<Object> = null;
+
+  private data: Array<any> = null;
   private files: Array<Object>;
   private folders: Array<Object>;
+  private matchCase: Boolean;
+  private stringFilter: string;
   private isEmpty: Boolean = false;
   private noResultsIndicator: Boolean = false;
   
   private progressSpinnerMode: string = 'indeterminate';
   private progressSpinnerColor: string = 'primary';
-  
-  private stringFilter: string = '';
 
   constructor(private ngRedux: NgRedux<IAppState>) { 
     this.files = [];
@@ -44,20 +46,39 @@ export class ItemGridComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-  }
-  
-  sendFileInfoToAppComponent(event){
-    this.sendFileInfoToAppComponentEvent.emit(event)
+    this.ngRedux.select(state => state.shouldMatchCase )
+      .subscribe( shouldMatchCase => {
+        this.ngRedux.dispatch( setIsLoadingToTrue() );
+        this.matchCase = shouldMatchCase;
+        this.populateGrid();
+      });
+      
+    this.ngRedux.select( state => state.searchString )
+      .subscribe( searchString => {
+        this.ngRedux.dispatch( setIsLoadingToTrue() );
+        this.stringFilter = searchString
+        this.populateGrid();
+      });
+      
+    this.ngRedux.select( state => state.currentFolderContents )
+      .subscribe( currentFolderContents => {
+        this.ngRedux.dispatch( setIsLoadingToTrue() );
+        this.isEmpty = true;
+        this.data = currentFolderContents;
+        if( this.data ) this.isEmpty = false;
+        this.populateGrid();
+      });
+      
   }
   
   populateGrid(){
+    this.files = [];
+    this.folders = [];
     this.noResultsIndicator = true;
-    console.log(this.data,this.stringFilter,this.matchCase)
     const data: Array<any> = this.data;
     
     if( data ){
       data.forEach( obj => {
-        
         let name = obj.name;
         let filter = this.stringFilter;
         
@@ -77,48 +98,8 @@ export class ItemGridComponent implements OnInit, OnChanges {
     if(this.folders.length > 0 || this.files.length > 0 ) this.noResultsIndicator = false;
     
     this.ngRedux.dispatch( setIsLoadingToFalse() );
-    console.log(this.isLoading);
   }
   
-  handleFolderContentChanges(folderContentChanges){
-    const changedData = folderContentChanges;
 
-    if(!changedData.currentValue) {
-      this.isEmpty = true;
-      return;
-    } else {
-      this.isEmpty = false;
-    }
-    
-    this.data = changedData.currentValue;    
-    this.populateGrid();
-  }
   
-  handleSearchStringChanges(searchStringChanges){
-    console.log('Search string from item-grid is: ', this.searchString)
-
-    if( searchStringChanges) this.stringFilter = searchStringChanges.currentValue;
-    
-    this.populateGrid();
-  }
-  
-  handleMatchCaseChange(matchCaseChange){
-    this.matchCase = matchCaseChange.currentValue
-    this.populateGrid();
-  }
-  
-  
-  
-  ngOnChanges(changes: SimpleChanges){
-    
-    this.folders = [];
-    this.files = [];
-    
-    if (changes.folderContents) this.handleFolderContentChanges(changes.folderContents);
-    
-    if (changes.matchCase) this.handleMatchCaseChange(changes.matchCase);
-    
-    if (changes.searchString) this.handleSearchStringChanges(changes.searchString);
-    
-  }
 }

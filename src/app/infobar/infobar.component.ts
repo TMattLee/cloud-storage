@@ -6,44 +6,42 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from '../app.store';
+
 @Component({
   selector: 'app-infobar',
   templateUrl: './infobar.component.html',
   styleUrls: ['./infobar.component.css']
 })
-export class InfobarComponent implements OnInit, OnChanges {
+export class InfobarComponent implements OnInit{
   
-  @Input() itemInfo: Object;
+
+  @select() itemInfo;
   
   private info: Object;
   private haveInfo: Boolean = false;
 
-  constructor() { }
+  constructor(private ngRedux: NgRedux<IAppState>) { }
 
   ngOnInit() {
-  }
-  
-  ngOnChanges(changes: SimpleChanges){
-    const info = changes.itemInfo.currentValue
-    this.info = info;
-    console.log('info is ', info)
-    if (this.info) this.haveInfo = true;
+    this.ngRedux.select( state => state.itemInfo)
+      .subscribe( itemInfo => {
+        if(itemInfo) this.haveInfo = true;
+        this.info = itemInfo;
+      });
   }
   
   getFileInfo(event){
-    console.log(event)
   }
   
   selectSize(size){
-    console.log(size)
     if( size < 1024) return size;
     return Math.floor(size/1024);
   }
   
   isSizeLessThan1024KB(size){
-    console.log('checkging... ', size)
   	return (size < 1024)
   }
   
-
 }

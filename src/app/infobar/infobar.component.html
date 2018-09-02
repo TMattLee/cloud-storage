@@ -2,8 +2,8 @@
 	<div class="preview-holder"></div>
 	<mat-divider></mat-divider>
 	<div class="data-area">
-		<div *ngIf="haveInfo" >
-			<div>File Name: {{info.name}}</div>
+		<div *ngIf="!!info" >
+			<div>{{info.kind === 'Folder' ? 'Folder' : 'File'}} Name: {{info.name}}</div>
 			<div *ngIf="!!info.mimeType">Mime Type: {{info.mimeType}} </div>
 			<div *ngIf="!!info.extension">Extension: {{info.extension}} </div>
 			<div *ngIf="!!info.sizeInKB">File Size: {{ selectSize(info.sizeInKB) }} 

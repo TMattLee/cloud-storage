@@ -3,7 +3,10 @@ import axios from 'axios';
 
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from './app.store';
-import { updateMainFolder } from './app.actions';
+import { 
+	updateMainFolder,
+	updateCurrentFolderContents
+} from './app.actions';
 
 @Component({
   selector: 'app-root',
@@ -23,22 +26,18 @@ export class AppComponent {
   private searchString: string = '';
   private matchCase: Boolean = false;
   
-  constructor(private ngRedux: NgRedux<IAppState>) { 
-  	
-  } 
+  constructor(private ngRedux: NgRedux<IAppState>) { } 
   
   ngAfterViewInit(){
-    console.log('initializing...');
     axios({
       method: 'GET',
       url:'api/getUser?username=Dummy%20User',
     })
     .then( response => {
-      console.log(response.data.mainFolder)
       this.folderContents = response.data.mainFolder.contents;
       const mainFolder = response.data.mainFolder;
       this.ngRedux.dispatch( updateMainFolder(mainFolder) );
-      console.log(this.ngRedux)
+      this.ngRedux.dispatch( updateCurrentFolderContents( this.folderContents ) );
     })
     .catch( error => console.log( error ));
   }

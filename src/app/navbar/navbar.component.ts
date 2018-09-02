@@ -1,8 +1,6 @@
 import { 
   Component, 
   OnInit, 
-  OnChanges, 
-  SimpleChanges,
   Input,
   Output,
   EventEmitter
@@ -11,8 +9,9 @@ import {
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from '../app.store';
 
-import { NestedTreeControl } from '@angular/cdk/tree';
+import { updateCurrentFolderContents } from '../app.actions';
 
+import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 export class FolderNode {
@@ -32,17 +31,10 @@ export class FolderNode {
   styleUrls: ['./navbar.component.css'],
 })
 
-export class NavbarComponent implements OnInit, OnChanges {
+export class NavbarComponent implements OnInit {
   
   @select() mainFolder;
   
-  //@Input() mainFolder : Array<Object>;
-  
-  @Output()
-  sendNodeInfoToAppComponentEvent: EventEmitter<Object> = new EventEmitter();
-  
-  @Output() sendSearchParamsToAppComponentEvent: EventEmitter<Object> = new EventEmitter();
-
   nestedTreeControl: NestedTreeControl<FolderNode>;
   nestedDataSource: MatTreeNestedDataSource<FolderNode>;
   
@@ -52,7 +44,6 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   private _fileData: Object;
   
-  private maxLength: number = 20;
   
   private subscription: any;
 
@@ -63,26 +54,14 @@ export class NavbarComponent implements OnInit, OnChanges {
   
   ngOnInit() {
     this.subscription = this.mainFolder.subscribe( m => {
-      console.log('subscription to mainFolder', m)
       const data = this.buildFileTree([m],0);
       this.nestedDataSource.data = data;
     })
   }
   
-  ngOnChanges(changes: SimpleChanges){
-    console.log(changes)
-    if(!changes) return;
-    //const mainFolder = changes.mainFolder.currentValue;
-    //const contents = changes.mainFolder.currentValue.contents;
-    //const newArr = [];
-    //newArr.push(mainFolder)
-    
-  }
-  
   buildFileTree(arr: Array<Object>, level: number): FolderNode[] {
     let result: FolderNode[] = [];
-    console.log(arr)
-    
+
     for (let elem in arr ){
       const obj = arr[elem];
       if( obj.hasOwnProperty('kind') && obj['kind'] === 'Folder'){
@@ -109,36 +88,9 @@ export class NavbarComponent implements OnInit, OnChanges {
   
   handleFilenameClick(event, node){
     event.preventDefault();
-    this.sendNodeInfoToAppComponentEvent.emit(node.contents);
+    this.ngRedux.dispatch( updateCurrentFolderContents(node.contents) );
   }
   
-  private itemsFiltered: Boolean = false;
-  private matchCaseIndicator: Boolean = false;
-  private inputString: string = '';
-
-  filterParent(){
-    this.sendSearchParamsToAppComponentEvent.emit({
-    	searchString: this.inputString,
-    	matchCase: this.matchCaseIndicator,
-    });
-  }
-  
-  handleSearchChange(event: any){
-  	this.inputString = event.target.value;
-  	
-    if(this.inputString === ''){
-      this.itemsFiltered = false;
-    } else {
-      this.itemsFiltered = true;
-    }
-    
-    this.filterParent();
-  }
-  
-  handleSliderToggle(event: any){
-  	this.matchCaseIndicator = event.checked;
-  	this.filterParent();
-  }
   
   ngOnDestroy(){
     this.subscription.unsubscribe();
