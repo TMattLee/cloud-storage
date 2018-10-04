@@ -30,6 +30,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -41,6 +42,7 @@ import { InfobarComponent } from './infobar/infobar.component';
 import { FolderComponent } from './navbar/folder/folder.component';
 import { ItemCardComponent } from './item-grid/item-card/item-card.component';
 import { SearchComponent } from './search/search.component';
+
 
 
 @NgModule({
@@ -71,30 +73,27 @@ import { SearchComponent } from './search/search.component';
     MatButtonToggleModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {
    constructor(
     private ngRedux: NgRedux<IAppState>,
     private devTools: DevToolsExtension) {
 
     let enhancers = [];
-    // ... add whatever other enhancers you want.
 
-    // You probably only want to expose this tool in devMode.
-    
     enhancers = [ ...enhancers, devTools.enhancer() ];
-    
-
 
     this.ngRedux.configureStore(
       rootReducer,
       INITIAL_STATE,
-      //[],
-      //enhancers
+      [],
+      enhancers
     );
   }
 }

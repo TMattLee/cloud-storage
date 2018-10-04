@@ -1,8 +1,10 @@
 :host(app-navbar) {
-	
+	display:				flex;
+	flex-direction:	column;
+	width:					15%;
+	float:					left;
+	overflow:				hidden;
 }
-
-
 
 .navbar-divider {
 	margin: 10px;

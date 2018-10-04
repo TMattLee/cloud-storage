@@ -2,28 +2,16 @@
 
 <div class="body-container" >
   
-  <div class="navbar-container">
-    
-    <app-navbar *ngIf="!!(mainFolder | async)" >
-    </app-navbar>
-    
-  </div>
-  
-  <mat-divider [vertical]="true"></mat-divider>
-  
-  <div class="item-grid-container">
-    
-    <app-item-grid ></app-item-grid>
 
-  </div>
-  
+  <app-navbar *ngIf="(mainFolder| async)" ></app-navbar>
+    
+
   <mat-divider [vertical]="true"></mat-divider>
   
+  <app-item-grid ></app-item-grid>
+
+  <mat-divider [vertical]="true"></mat-divider>
   
-  
-  <div class="infobar-container">
-    
-    <app-infobar ></app-infobar>
-  </div>
-  
+  <app-infobar ></app-infobar>
+
 </div>

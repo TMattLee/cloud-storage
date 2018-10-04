@@ -1,5 +1,7 @@
-<mat-card class="card" [class.mat-elevation-z4]=true (click)="updateItemInfo($event)">
-	<mat-icon *ngIf="isFolder"class="card-icon">folder</mat-icon>
-	<mat-icon *ngIf="isFile"class="card-icon">image</mat-icon>
+<mat-card class="card" [class.mat-elevation-z4]=true (click)="updateItemInfo($event)" (dblclick)="handleDoubleClick($event)">
+	<mat-icon *ngIf="isFolder"class="card-icon" >folder</mat-icon>
+	<mat-icon *ngIf="isImage"class="card-icon">image</mat-icon>
+	<mat-icon *ngIf="isText"class="card-icon">insert_drive_file</mat-icon>
+	<mat-icon *ngIf="isVideo"class="card-icon">videocam</mat-icon>
 	<mat-card-content class="card-content">{{name.slice(0,20)}}</mat-card-content>
 </mat-card>

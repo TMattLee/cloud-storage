@@ -1,5 +1,6 @@
 //import { IMainFolder } from './MainFolder';
 import * as actions from './app.actions';
+import { FolderNode } from './models/folder-node.model';
 
 export interface IAppState {
 	mainFolder:							Object,
@@ -7,7 +8,9 @@ export interface IAppState {
 	searchString: 					string,
 	shouldMatchCase:				Boolean,
 	currentFolderContents:	Array<Object>,
-	itemInfo:								Object
+	itemInfo:								Object,
+	activeFolderNode:				FolderNode,
+	folderTree:							FolderNode,
 }
 
 export const INITIAL_STATE: IAppState = {
@@ -17,6 +20,8 @@ export const INITIAL_STATE: IAppState = {
 	shouldMatchCase:				false,
 	currentFolderContents:	[],
 	itemInfo:								null,
+	activeFolderNode:				null,
+	folderTree:							null,
 }
 
 export function rootReducer(state: IAppState, actions): IAppState {
@@ -55,7 +60,24 @@ export function rootReducer(state: IAppState, actions): IAppState {
 		case 'UPDATE_ITEM_INFO':
 			return Object.assign({}, state, {
 				itemInfo:		actions.itemInfo
-			})
+			});
+			
+		case 'UPDATE_FOLDER_TREE':
+			return Object.assign({}, state, {
+				folderTree:		actions.folderTree
+			});
+			
+		case 'UPDATE_ACTIVE_FOLDER_BY_NODE':
+			return Object.assign({}, state, {
+				activeFolderNode:				actions.activeFolderNode,
+				currentFolderContents:  actions.currentFolderContents
+			});
+			
+		case 'UPDATE_ACTIVE_FOLDER_NODE_BY_ID':
+			return Object.assign({}, state, {
+				activeFolderNode:				actions.activeFolderNode,
+				currentFolderContents:  actions.currentFolderContents
+			});
 	}
 	
 	return state;

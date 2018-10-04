@@ -1,3 +1,11 @@
-<p>
-  folder works!
-</p>
+<button mat-icon-button matTreeNodeToggle  *ngIf="(treeControl && node.isBottomFolder)"
+  [disabled]="node.isBottomFolder"  
+  [attr.aria-label]="'toggle ' + node.foldername">
+  <mat-icon class="mat-icon-rtl-mirror">folder</mat-icon>
+</button>
+<button mat-icon-button matTreeNodeToggle  *ngIf="(treeControl && !node.isBottomFolder)"
+    [attr.aria-label]="'toggle ' + node.foldername">
+  <mat-icon class="mat-icon-rtl-mirror">
+    {{ treeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
+  </mat-icon>
+</button>

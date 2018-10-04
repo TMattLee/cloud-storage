@@ -58,6 +58,11 @@ User.findOne({})
         .catch( error => console.log)
       })
       
+      fs.writeFile('./src/app/dummydata.txt', JSON.stringify(docs, null, 4), (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+      })
+      
       //console.log(JSON.stringify(docs, null, 4))
     }
   })
@@ -68,7 +73,7 @@ app.set( "view engine", "ejs" );
 
 //----------------------- Express Options ----------------------------
 app.set('images', process.cwd() + '/public/user/images');
-app.use( express.static( process.cwd() + '/public' ) );
+app.use( express.static( process.cwd() + '/src' ) );
 app.use( bodyParser.json() ); // support json encoded bodies
 app.use( bodyParser.urlencoded( { extended: false } ) ); // support encoded bodies
 app.use(

@@ -3,27 +3,20 @@ import {
   OnInit, 
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  ViewChildren,
+  QueryList,
 } from '@angular/core';
+
+import { MatButtonToggle } from '@angular/material/button-toggle';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { Subscription } from 'rxjs/internal/Subscription';
   
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from '../app.store';
-
-import { updateCurrentFolderContents } from '../app.actions';
-
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-
-export class FolderNode {
-  children:       FolderNode[];
-  foldername:     string;
-  type:           any;
-  kind:           string;
-  id:             string;
-  contents:       Array<Object>;
-  parentFolderId: any;
-}
-
+import { updateActiveFolderByNode,updateFolderTree } from '../app.actions';
+import { FolderNode } from '../models/folder-node.model';
 
 @Component({
   selector: 'app-navbar',
@@ -35,17 +28,27 @@ export class NavbarComponent implements OnInit {
   
   @select() mainFolder;
   
+  @select() activeFolderNode;
+  
+  @Output() test = new EventEmitter<any>();
+  
+  @ViewChildren(MatButtonToggle) toggleButtons: QueryList<MatButtonToggle>;
+  
+  topNode: FolderNode;
+  
+  folderTree: FolderNode;
+  
   nestedTreeControl: NestedTreeControl<FolderNode>;
   nestedDataSource: MatTreeNestedDataSource<FolderNode>;
   
-  hasNestedChild = (_: number, nodeData: FolderNode) => !nodeData.type;
+  hasNestedChild = (_: number, nodeData: FolderNode) => !nodeData.isBottomFolder;
 
   private _getChildren = (node: FolderNode) => node.children;
 
   private _fileData: Object;
   
-  
-  private subscription: any;
+  private mainFolderSubscription: Subscription;
+  private activeFolderNodeSubscription: Subscription;
 
   constructor(private ngRedux: NgRedux<IAppState>) {
     this.nestedTreeControl = new NestedTreeControl<FolderNode>(this._getChildren);
@@ -53,10 +56,27 @@ export class NavbarComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.subscription = this.mainFolder.subscribe( m => {
-      const data = this.buildFileTree([m],0);
-      this.nestedDataSource.data = data;
-    })
+    this.mainFolderSubscription = this.mainFolder.subscribe( m => {
+      this.folderTree = this.buildFileTree([m],0)[0];
+      this.nestedDataSource.data = [this.folderTree];
+      this.ngRedux.dispatch( updateFolderTree( this.folderTree ));
+      this.nestedTreeControl.expand(this.folderTree);
+    });
+    
+    this.activeFolderNodeSubscription = this.activeFolderNode.subscribe(
+      (folderNode: FolderNode) => {
+        this.nestedTreeControl.expand(folderNode);
+        if( this.toggleButtons ) {
+          this.toggleButtons.forEach(
+            button => {
+              if(button.value === folderNode.foldername) {
+                button.checked = true;
+              } else {
+                button.checked = false;
+              }
+          });
+        }
+    });
   }
   
   buildFileTree(arr: Array<Object>, level: number): FolderNode[] {
@@ -70,29 +90,30 @@ export class NavbarComponent implements OnInit {
         node.kind = obj['kind'];
         node.id = obj['_id'];
         node.parentFolderId = obj['parentFolderId'];
+        node.mimeType = obj['mimeType'];
         
         if(obj['contents'] !== null){ 
           node.contents = obj['contents']
           node.children = this.buildFileTree(obj['contents'], level+1);
+          node.isBottomFolder = false;
         }
         else {
-          node.type = 'bottom'
+          node.isBottomFolder = true;
         }
         
         result.push(node);
       }
     }
-    
     return result;
   }
   
   handleFilenameClick(event, node){
     event.preventDefault();
-    this.ngRedux.dispatch( updateCurrentFolderContents(node.contents) );
+    this.ngRedux.dispatch( updateActiveFolderByNode(node) );
   }
-  
   
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    this.mainFolderSubscription.unsubscribe();
   }
+  
 }

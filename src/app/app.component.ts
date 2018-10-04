@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 
 import { NgRedux, select } from '@angular-redux/store';
@@ -8,12 +8,14 @@ import {
 	updateCurrentFolderContents
 } from './app.actions';
 
+import * as dataFile from './dummydata.js';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	
 	@select() mainFolder;
 	
@@ -25,11 +27,26 @@ export class AppComponent {
   private itemInfo: Object;
   private searchString: string = '';
   private matchCase: Boolean = false;
+  private mainFolderSubscription: any;
   
   constructor(private ngRedux: NgRedux<IAppState>) { } 
   
+  ngOnInit(){
+    this.mainFolderSubscription = this.mainFolder.subscribe(
+      (mainFolder) => {
+        
+      }  
+    )
+    
+    const data = dataFile;
+    const mainFolder = data.mainFolder;
+    const folderContents = mainFolder.contents
+    this.ngRedux.dispatch( updateMainFolder(mainFolder) );
+    this.ngRedux.dispatch( updateCurrentFolderContents( folderContents ) );
+  }
+  
   ngAfterViewInit(){
-    axios({
+    /*axios({
       method: 'GET',
       url:'api/getUser?username=Dummy%20User',
     })
@@ -39,7 +56,8 @@ export class AppComponent {
       this.ngRedux.dispatch( updateMainFolder(mainFolder) );
       this.ngRedux.dispatch( updateCurrentFolderContents( this.folderContents ) );
     })
-    .catch( error => console.log( error ));
+    .catch( error => console.log( error ));*/
+    
   }
   
   updateFileItem(event){

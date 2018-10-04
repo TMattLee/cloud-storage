@@ -100,6 +100,4 @@ export class ItemGridComponent implements OnInit {
     this.ngRedux.dispatch( setIsLoadingToFalse() );
   }
   
-
-  
 }

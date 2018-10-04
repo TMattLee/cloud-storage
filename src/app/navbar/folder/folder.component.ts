@@ -1,4 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { 
+  Component, 
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
+
+import { FolderNode } from '../../models/folder-node.model';
+
+import { Subscription } from 'rxjs';
+
+
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from '../../app.store';
+import { updateCurrentFolderContents } from '../../app.actions';
 
 @Component({
   selector: 'app-folder',
@@ -6,10 +22,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./folder.component.css']
 })
 export class FolderComponent implements OnInit {
-
-  constructor() { }
+  
+  @Input() node: FolderNode;
+  @Input() treeControl;
+  
+  constructor(private ngRedux: NgRedux<IAppState>) {}
 
   ngOnInit() {
+    
   }
-
+  
 }

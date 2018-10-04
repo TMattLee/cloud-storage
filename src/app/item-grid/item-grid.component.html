@@ -34,7 +34,7 @@
 		<mat-card class="empty-warning">Folder is empty.</mat-card>
 	</div>
 	<div *ngIf="!isEmpty && noResultsIndicator">
-		<mat-card class="empty-warning">No results</mat-card>
+		<mat-card class="empty-warning">Search return no results.</mat-card>
 	</div>
 </div>
 <div *ngIf="(isLoading | async)" class="spinner-container">
