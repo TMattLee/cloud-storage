@@ -34,6 +34,8 @@ export class NavbarComponent implements OnInit {
   
   @ViewChildren(MatButtonToggle) toggleButtons: QueryList<MatButtonToggle>;
   
+  parentFolderArray: FolderNode[] = [];
+  
   topNode: FolderNode;
   
   folderTree: FolderNode;
@@ -66,6 +68,10 @@ export class NavbarComponent implements OnInit {
     this.activeFolderNodeSubscription = this.activeFolderNode.subscribe(
       (folderNode: FolderNode) => {
         this.nestedTreeControl.expand(folderNode);
+        this.getParentFolders(folderNode);
+        while( this.parentFolderArray && this.parentFolderArray.length > 0 ){
+          this.nestedTreeControl.expand( this.parentFolderArray.shift());
+        }
         if( this.toggleButtons ) {
           this.toggleButtons.forEach(
             button => {
@@ -114,6 +120,25 @@ export class NavbarComponent implements OnInit {
   
   ngOnDestroy(){
     this.mainFolderSubscription.unsubscribe();
+  }
+  
+  getParentFolders(node){
+    if(node && node.parentFolderId){
+      const parentNode = this.findNode(node.parentFolderId, this.folderTree);
+      this.parentFolderArray.push(parentNode);
+      this.getParentFolders(parentNode);
+    }
+    
+  }
+  
+  findNode (id, node) {
+    if( node.id === id ) return node;
+    if(node.children && node.children.length > 0) {
+      for(let n of node.children){
+        const result  = this.findNode(id, n);
+        if(result && result.id === id) return result;
+      }
+    }
   }
   
 }
